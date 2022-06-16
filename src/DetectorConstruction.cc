@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /// \file DetectorConstruction.cc
-/// \brief Implementation of the DetectorConstruction class
+// \brief Implementation of the DetectorConstruction class
 //
 //
 
@@ -69,9 +69,9 @@ DetectorConstruction::DetectorConstruction()
   fBoxX = 7*m; //World size X
   fBoxY = 16*m; //World size Y
   fBoxZ = 4*m;  //World size Z
-  fRoom_x = fBoxX -5*cm;
-  fRoom_y = fBoxY - 5*cm;
-  fRoom_z = fBoxZ - 5*cm;
+  fRoom_x = fBoxX;
+  fRoom_y = fBoxY;
+  fRoom_z = fBoxZ;
   fSideThk = 9*2.5*2*cm;
   fTopThk = 3*18*cm;
   fChamber_x = fTank_x - 2*fSideThk;
@@ -84,12 +84,12 @@ DetectorConstruction::DetectorConstruction()
   fPoly_x = fNeutronSource_x + 30*cm;
   fPoly_y = fNeutronSource_y + 30*cm;
   fPoly_z = fNeutronSource_z + 17.5*cm;
-  fSourceOffset_z = fPoly_z/2 - fNeutronSource_z/2 - 2.5*cm;
+  fSourceOffset_z = fPoly_z/2 - fNeutronSource_z/2 - 2.5*cm;  
   fSlab_z = 17.5*cm;
   fGap = 10*cm;
   fDDHead_x = 0*cm;
   fDDHead_y = -fChamber_y/2 + fPoly_y/2 + 2.5*cm;
-  fDDHead_z = -fBoxZ/2 + fSlab_z + fGap + fPoly_z - fNeutronSource_z/2 -2.5*cm;
+  fDDHead_z = -fBoxZ/2 + fSlab_z + fGap + 15*cm + fNeutronSource_z/2; 
   detectorDiam = 2.5*cm;
   detectorLen = 8*cm;
   detectorPressure = 8; //bar
@@ -212,7 +212,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 
   roomP = new G4PVPlacement(0,
-			    G4ThreeVector(0,0,-fBoxZ/2 + fSlab_z + fGap  +fRoom_z/2),
+			    G4ThreeVector(0,0,0),
 			    roomL,
 			    "Room",
 			    worldL,
@@ -243,19 +243,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4double floor_z = fGap+fSlab_z-fBoxZ/2;
 
-  G4Sphere* sphereS = new G4Sphere("Sphere",
-				   0*cm,
-				   20*cm, //confirm this later
-				   0.0 * deg, 360 * deg,
-				   0.0 * deg, 360 * deg);
-
-  ///////////////////////////////////////////////////////////////////////////////
-  //   Neutron Probe Construction HERE                                         //
-  ///////////////////////////////////////////////////////////////////////////////
-
-  probePeL = new G4LogicalVolume(sphereS,
-				 concrete,
-				 "Probe_PE");
+				   
   
 
   
@@ -272,7 +260,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 			      "Tank");
 
   tankP = new G4PVPlacement(0,
-			    G4ThreeVector(0,0,-fRoom_z/2+fTank_z/2),
+			    G4ThreeVector(0,0,-fRoom_z/2 + fGap + fSlab_z +fTank_z/2), 
 			    tankL,
 			    "Tank",
 			    roomL,
@@ -298,6 +286,57 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 			      false,
 			      0,
 			      checkOverlaps);
+
+
+  
+  G4Sphere* sphereS = new G4Sphere("Sphere",
+				   0*cm,
+				   10*cm, //confirm this later
+				   0.0 * deg, 360 * deg,
+				   0.0 * deg, 360 * deg);
+
+  ///////////////////////////////////////////////////////////////////////////////
+  //   Neutron Probe Construction HERE                                         //
+  ///////////////////////////////////////////////////////////////////////////////
+
+
+  
+  G4Material* PE =  G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYETHYLENE");
+  
+  probePeL = new G4LogicalVolume(sphereS,
+				 PE, //change later
+				 "Probe_PE");
+
+  probePeP = new G4PVPlacement(0,
+			       G4ThreeVector(0, fChamber_y/2 - 15*cm, -5*cm),
+			       probePeL,
+			       "probePE",
+			       chamberL,
+			       false,
+			       0,
+			       checkOverlaps);
+			       
+  
+  G4Tubs* detectorS = new G4Tubs("detector",
+				 0,                     //inner radius
+				 detectorDiam/2,        //outer radius
+				 detectorLen/2,         //length
+				 0.0*deg, 360.0*deg);   //angle
+
+  detectorL = new G4LogicalVolume(detectorS,
+				  fMaterial, //change later
+				  "detector");
+
+  detectorP = new G4PVPlacement(0,
+				G4ThreeVector(0,0,0),
+				detectorL,
+				"Detector",
+				probePeL,
+				false,
+				0,
+				checkOverlaps);
+
+    
   //enable to add gaps in one side of structure
   /* 
   G4VSolid* gapS = new G4Tubs("Gap",
@@ -341,7 +380,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   //construct the polyethylene shielding here
   G4double density = 0.94*g/cm3;
   G4NistManager* manager = G4NistManager::Instance();
-  G4Material* PE =  G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYETHYLENE");
   G4Element* B = manager->FindOrBuildElement("B");
   G4Element* H = manager->FindOrBuildElement("H");
   G4Element* O = manager->FindOrBuildElement("O");

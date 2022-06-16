@@ -111,27 +111,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       G4AnalysisManager::Instance()->FillNtupleDColumn(2,3,ekin); 
       G4AnalysisManager::Instance()->AddNtupleRow(2);
     }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->workL){
-      G4AnalysisManager::Instance()->FillH1(6,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->door1L){
-      G4AnalysisManager::Instance()->FillH1(7,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->door2L){
-      G4AnalysisManager::Instance()->FillH1(8,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->ceilingL){
-      G4AnalysisManager::Instance()->FillH1(9,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->beamsideL){
-      G4AnalysisManager::Instance()->FillH1(11,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->backL){
-      G4AnalysisManager::Instance()->FillH1(13,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->topL){
-      G4AnalysisManager::Instance()->FillH1(15,ekin);
-    }
+    
   }
 
   
@@ -155,27 +135,6 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       G4AnalysisManager::Instance()->FillNtupleDColumn(3,2,z/1000); //ID, column,value
       G4AnalysisManager::Instance()->FillNtupleDColumn(3,3,ekin); 
       G4AnalysisManager::Instance()->AddNtupleRow(3);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->workL){
-      G4AnalysisManager::Instance()->FillH1(2,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->door1L){
-      G4AnalysisManager::Instance()->FillH1(3,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->door2L){
-      G4AnalysisManager::Instance()->FillH1(4,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->ceilingL){
-      G4AnalysisManager::Instance()->FillH1(5,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->beamsideL){
-      G4AnalysisManager::Instance()->FillH1(10,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->backL){
-      G4AnalysisManager::Instance()->FillH1(12,ekin);
-    }
-    if(preLogical == fDetector->roomL && postLogical == fDetector->topL){
-      G4AnalysisManager::Instance()->FillH1(14,ekin);
     }
   }
 }

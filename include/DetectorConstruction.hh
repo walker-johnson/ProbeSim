@@ -85,20 +85,10 @@ public:
   G4LogicalVolume* tankL;
   G4VPhysicalVolume* tankP;
   //area dose rates
-  G4LogicalVolume* workL;
-  G4VPhysicalVolume* workP;
-  G4LogicalVolume* door1L;
-  G4VPhysicalVolume* door1P;
-  G4LogicalVolume* door2L;
-  G4VPhysicalVolume* door2P;
-  G4LogicalVolume* ceilingL;
-  G4VPhysicalVolume* ceilingP;
-  G4LogicalVolume* beamsideL;
-  G4VPhysicalVolume* beamsideP;
-  G4LogicalVolume* backL;
-  G4VPhysicalVolume* backP;
-  G4LogicalVolume* topL;
-  G4VPhysicalVolume* topP;
+  G4LogicalVolume* probePeL;
+  G4VPhysicalVolume* probePeP;
+  G4LogicalVolume* detectorL;
+  G4VPhysicalVolume* detectorP;
 
   
 
@@ -131,6 +121,11 @@ private:
   G4double fGap;
   G4Material* fMaterial;
   DetectorMessenger* fDetectorMessenger;
+
+  G4double detectorDiam;
+  G4double detectorLen;
+  G4double detectorPressure;
+  G4double detectorDensity;
 
 
   //chamber
