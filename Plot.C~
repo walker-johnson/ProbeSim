@@ -1,0 +1,42 @@
+#include "TFile.h"
+#include "TTree.h"
+
+void plot()
+{
+  //variables used to store the data                                                                                                                                                                       
+  Int_t num_trans = 0;
+
+  //open the file                                                                                                                                                                                          
+  TFile* f =  new TFile("Hadr04.root");
+
+  //Create the tree reader and its containers                                                                                                                                                              
+  TTreeReader myReader("ntransport", f);
+
+  TTreeReaderValue<Double_t> x(myReader, "x");
+  TTreeReaderValue<Double_t> y(myReader, "y");
+  TTreeReaderValue<Double_t> z(myReader, "z");
+
+  TH2F* xy = new TH2F("X vs Y", "X vs Y", 100, -5, 5, 100, -5, 5);
+  TH2F* xz = new TH2F("X vs Z", "X vs Z", 100, -5, 5, 100, -5, 5);
+  TH2F* yz = new TH2F("Y vs Z", "Y vs Z", 100, -5, 5, 100, -5, 5);
+  while(myReader.Next()){
+    //Get the data from the crrent TTree entry by getting
+    //the value from the connected reader.
+    xy->Fill(*x,*y);
+    xz->Fill(*x,*z);
+    yz->Fill(*y, *z);
+    num_trans += 1;
+  }
+
+  TCanvas *c1=new TCanvas();
+  c1->Divide(3,1);
+  
+
+  printf("Total neutrons transported: %d\n", num_trans);
+  c1->cd(1);
+  xy->Draw("colz");
+  c1->cd(2);
+  xz->Draw("colz");
+  c1->cd(3);
+  yz->Draw("colz");
+}

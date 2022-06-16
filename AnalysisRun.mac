@@ -1,0 +1,36 @@
+/control/execute analysis.mac
+
+/testhadr/det/setSheild 10 cm
+/analysis/setFileName 10cmLiPoly
+/run/initialize
+/run/beamOn 1000000
+
+/testhadr/det/setSheild 15 cm
+/analysis/setFileName 15cmLiPoly
+/run/initialize
+/run/beamOn 1000000
+
+/testhadr/det/setSheild 20 cm
+/analysis/setFileName 20cmLiPoly
+/run/initialize
+/run/beamOn 1000000
+
+/testhadr/det/setSheild 25 cm
+/analysis/setFileName 25cmLiPoly
+/run/initialize
+/run/beamOn 1000000
+
+/testhadr/det/setSheild 30 cm
+/analysis/setFileName 30cmLiPoly
+/run/initialize
+/run/beamOn 1000000
+
+/testhadr/det/setSheild 35 cm
+/analysis/setFileName 35cmLiPoly
+/run/initialize
+/run/beamOn 1000000
+
+/testhadr/det/setSheild 40 cm
+/analysis/setFileName 40cmLiPoly
+/run/initialize
+/run/beamOn 1000000

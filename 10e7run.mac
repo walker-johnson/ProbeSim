@@ -1,0 +1,5 @@
+/control/execute analysis.mac
+
+/analysis/setFileName BoratedPoly
+/run/initialize
+/run/beamOn 10000000
