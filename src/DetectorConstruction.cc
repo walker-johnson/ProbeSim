@@ -308,7 +308,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 				 "Probe_PE");
 
   probePeP = new G4PVPlacement(0,
-			       G4ThreeVector(0, fChamber_y/2 - 15*cm, -5*cm),
+			       G4ThreeVector(0, fChamber_y/2 - 15*cm, -6.5*cm),
 			       probePeL,
 			       "probePE",
 			       chamberL,

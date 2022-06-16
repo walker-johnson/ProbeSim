@@ -65,7 +65,7 @@ void HistoManager::Book()
   const G4String id[] = {"0","1", "2", "3", "4", "5", "6", "7", "8","9", "10", "11", "12","13","14","15"};
   const G4String title[] = 
                 { "dummy",                                           //0
-                  "KE of Gammas Leaving Shield",                      //1
+                  "KE of Neutrons Hitting Detector",                      //1
 		  "KE of Gammas - Work Area",
 		  "KE of Gammas - Front Door",
 		  "KE of Gammas - Side Door",

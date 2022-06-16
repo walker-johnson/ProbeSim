@@ -111,6 +111,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       G4AnalysisManager::Instance()->FillNtupleDColumn(2,3,ekin); 
       G4AnalysisManager::Instance()->AddNtupleRow(2);
     }
+
+    if(preLogical != fDetector->detectorL && postLogical == fDetector->detectorL){
+      G4AnalysisManager::Instance()->Fill(1,ekin);
+    }
     
   }
 
