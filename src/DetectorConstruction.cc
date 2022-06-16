@@ -90,6 +90,10 @@ DetectorConstruction::DetectorConstruction()
   fDDHead_x = 0*cm;
   fDDHead_y = -fChamber_y/2 + fPoly_y/2 + 2.5*cm;
   fDDHead_z = -fBoxZ/2 + fSlab_z + fGap + fPoly_z - fNeutronSource_z/2 -2.5*cm;
+  detectorDiam = 2.5*cm;
+  detectorLen = 8*cm;
+  detectorPressure = 8; //bar
+  detectorDensity = 1; //need to calculate this
   DefineMaterials();
   SetMaterial("G4_AIR");   //Sets the material of the world
   fDetectorMessenger = new DetectorMessenger(this);
@@ -197,7 +201,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
  			        0,                          //copy number
 				checkOverlaps);             //option to check for overlaps
 
-    G4Box* roomS = new G4Box("Room",
+  G4Box* roomS = new G4Box("Room",
 			   fRoom_x/2,
 			   fRoom_y/2,
 			   fRoom_z/2);
@@ -241,103 +245,20 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4Sphere* sphereS = new G4Sphere("Sphere",
 				   0*cm,
-				   sphereR,
+				   20*cm, //confirm this later
 				   0.0 * deg, 360 * deg,
 				   0.0 * deg, 360 * deg);
 
-  workL = new G4LogicalVolume(sphereS,
-			      fMaterial,
-			      "work");
+  ///////////////////////////////////////////////////////////////////////////////
+  //   Neutron Probe Construction HERE                                         //
+  ///////////////////////////////////////////////////////////////////////////////
 
-  door1L = new G4LogicalVolume(sphereS,
-			       fMaterial,
-			       "door1");
-
-  door2L = new G4LogicalVolume(sphereS,
-			       fMaterial,
-			       "door2");
-
-  ceilingL = new G4LogicalVolume(sphereS,
-				 fMaterial,
-				 "ceiling");
+  probePeL = new G4LogicalVolume(sphereS,
+				 concrete,
+				 "Probe_PE");
   
-  beamsideL = new G4LogicalVolume(sphereS,
-				 fMaterial,
-				 "beamside");
 
-  backL = new G4LogicalVolume(sphereS,
-				 fMaterial,
-				 "back");
-
-  topL = new G4LogicalVolume(sphereS,
-				 fMaterial,
-				 "top");
-
-  workP = new G4PVPlacement(0,
-			    G4ThreeVector(-3*m, 5.5*m, floor_z + 0.5*m),
-			    workL,
-			    "work",
-			    roomL,
-			    false,
-			    0,
-			    checkOverlaps);
   
-  door1P = new G4PVPlacement(0,
-			     G4ThreeVector(-3*m,-1.0*m, floor_z + 0.5*m),
-			     door1L,
-			     "door1",
-			     roomL,
-			     false,
-			     0,
-			     checkOverlaps);
-  
-  door2P = new G4PVPlacement(0,
-			     G4ThreeVector(2*m, 7.5*m, floor_z + 0.5*m),
-			     door2L,
-			     "door2",
-			     roomL,
-			     false,
-			     0,
-			     checkOverlaps);
-  
-  ceilingP = new G4PVPlacement(0,
-			       G4ThreeVector(0*m, 0*m, floor_z + 3.3*m),
-			       ceilingL,
-			       "ceiling",
-			       roomL,
-			       false,
-			       0,
-			       checkOverlaps);
-  
-  beamsideP = new G4PVPlacement(0,
-			       G4ThreeVector(0*m, fTank_y/2 + 20*cm, floor_z + 0.25*m),
-			       beamsideL,
-			       "beamside",
-			       roomL,
-			       false,
-			       0,
-			       checkOverlaps);
-
-  backP = new G4PVPlacement(0,
-			    G4ThreeVector(fTank_x/2 + 20*cm, 0*cm, floor_z + 0.25*m),
-			    backL,
-			    "back",
-			    roomL,
-			    false,
-			    0,
-			    checkOverlaps);
-
-  topP = new G4PVPlacement(0,
-			   G4ThreeVector(0*m, 0*m, floor_z+fTank_z+20*cm),
-			   topL,
-			   "ceiling",
-			   roomL,
-			   false,
-			   0,
-			   checkOverlaps);
-
-				   
-
 
   G4Material* water = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
   
