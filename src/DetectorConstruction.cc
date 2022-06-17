@@ -63,37 +63,37 @@ DetectorConstruction::DetectorConstruction()
  worldP(0), worldL(0), fMaterial(0), fDetectorMessenger(0)
 {
   sphereR = 15*cm;
-  fTank_x = 7*2.5*9*cm;
-  fTank_y = 9*2.5*9*cm;
-  fTank_z = 18*6*cm;
+  fTank_x = 7*2.5*9*cm; //water tank size in x
+  fTank_y = 9*2.5*9*cm; //water tank size in y
+  fTank_z = 18*6*cm; //water tank size in z
   fBoxX = 7*m; //World size X
   fBoxY = 16*m; //World size Y
   fBoxZ = 4*m;  //World size Z
-  fRoom_x = fBoxX;
-  fRoom_y = fBoxY;
-  fRoom_z = fBoxZ;
-  fSideThk = 9*2.5*2*cm;
-  fTopThk = 3*18*cm;
-  fChamber_x = fTank_x - 2*fSideThk;
-  fChamber_y = fTank_y - 2*fSideThk;
-  fChamber_z = fTank_z - fTopThk;
-  fInc = 0.25*m;
-  fNeutronSource_x = 12*cm;
-  fNeutronSource_y = 37.5*cm;
-  fNeutronSource_z = 12*cm;
-  fPoly_x = fNeutronSource_x + 30*cm;
-  fPoly_y = fNeutronSource_y + 30*cm;
-  fPoly_z = fNeutronSource_z + 17.5*cm;
+  fRoom_x = fBoxX; //Room size
+  fRoom_y = fBoxY; //Room size
+  fRoom_z = fBoxZ; //Room size
+  fSideThk = 9*2.5*2*cm; //Thickness of the side of the water tank
+  fTopThk = 3*18*cm; //Thickness of the top of the water tank
+  fChamber_x = fTank_x - 2*fSideThk; //Size of the inner chamber in x
+  fChamber_y = fTank_y - 2*fSideThk;  //Size of the inner chamber in y
+  fChamber_z = fTank_z - fTopThk;  //Size of the inner chamber in z
+  fInc = 0.25*m; 
+  fNeutronSource_x = 12*cm; //size of the DDG
+  fNeutronSource_y = 37.5*cm; //size of the DDG
+  fNeutronSource_z = 12*cm; //size of the DDG
+  fPoly_x = fNeutronSource_x + 30*cm; //outer dimension of the poly shield
+  fPoly_y = fNeutronSource_y + 30*cm; //outer dimension of the poly shield
+  fPoly_z = fNeutronSource_z + 17.5*cm; //outer dimension of the poly shield
   fSourceOffset_z = fPoly_z/2 - fNeutronSource_z/2 - 2.5*cm;  
-  fSlab_z = 17.5*cm;
-  fGap = 10*cm;
-  fDDHead_x = 0*cm;
-  fDDHead_y = -fChamber_y/2 + fPoly_y/2 + 2.5*cm;
-  fDDHead_z = -fBoxZ/2 + fSlab_z + fGap + 15*cm + fNeutronSource_z/2; 
-  detectorDiam = 2.5*cm;
-  detectorLen = 8*cm;
+  fSlab_z = 17.5*cm; //thickness of concrete slab
+  fGap = 10*cm; //size of air gap under concrete slab
+  fDDHead_x = 0*cm; //location for source
+  fDDHead_y = -fChamber_y/2 + fPoly_y/2 + 2.5*cm;  //location for source
+  fDDHead_z = -fBoxZ/2 + fSlab_z + fGap + 15*cm + fNeutronSource_z/2; //location for source
+  detectorDiam = 2.5*cm; //diameter of helium-3 tube
+  detectorLen = 8*cm; //length of helium-3 tube
   detectorPressure = 8; //bar
-  detectorDensity = 1; //need to calculate this
+  detectorDensity = 0.9832; //g/cm3
   DefineMaterials();
   SetMaterial("G4_AIR");   //Sets the material of the world
   fDetectorMessenger = new DetectorMessenger(this);
@@ -243,9 +243,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4double floor_z = fGap+fSlab_z-fBoxZ/2;
 
-				   
-  
-
   
 
   G4Material* water = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
@@ -288,13 +285,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 			      checkOverlaps);
 
 
-  
-  G4Sphere* sphereS = new G4Sphere("Sphere",
-				   0*cm,
-				   10*cm, //confirm this later
-				   0.0 * deg, 360 * deg,
-				   0.0 * deg, 360 * deg);
-
   ///////////////////////////////////////////////////////////////////////////////
   //   Neutron Probe Construction HERE                                         //
   ///////////////////////////////////////////////////////////////////////////////
@@ -303,15 +293,25 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   //High density polyethylene
   G4Material* PE =  G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYETHYLENE");
 
+
+  
   //8 bar helium-3
   G4Isotope* He3 = new G4Isotope("He3", 2,5);
   G4Element* He_3 = new G4Element("Helium-3", "He-3", 1);
-  He-3->AddIsotope(He3, 100*perCent);
+  He_3->AddIsotope(He3, 100*perCent);
 		   
-  G4Material* det_He = new G4Material("PressurizedHe3", 0.9832*g/cm3, ncomponents=1, kStateGas, 293.15*kelvin, 8*bar);
+  G4Material* det_He = new G4Material("PressurizedHe3", detectorDensity*g/cm3, ncomponents=1, kStateGas, 293.15*kelvin, detectorPressure*bar);
   det_He->AddElement(He_3);
 
   
+
+
+  //HDPE moderator
+  G4Sphere* sphereS = new G4Sphere("Sphere",
+				   0*cm,
+				   10*cm, //confirm this later
+				   0.0 * deg, 360 * deg,
+				   0.0 * deg, 360 * deg);
   
   probePeL = new G4LogicalVolume(sphereS,
 				 PE, //change later
@@ -325,8 +325,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 			       false,
 			       0,
 			       checkOverlaps);
+
+
 			       
-  
+  //Helium-3 Tube
   G4Tubs* detectorS = new G4Tubs("detector",
 				 0,                     //inner radius
 				 detectorDiam/2,        //outer radius
@@ -346,46 +348,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 				0,
 				checkOverlaps);
 
-    
-  //enable to add gaps in one side of structure
-  /* 
-  G4VSolid* gapS = new G4Tubs("Gap",
-			    0,
-			    0.5*cm,
-			    (fTank_x/2 - fChamber_x/2)/2,
-			    0.0*deg, 360.0*deg);
-
-  gapL = new G4LogicalVolume(gapS,
-			     fMaterial,
-			     "Gap");
-
-  G4PVPlacement* gapsP [24];
-
-  G4RotationMatrix* rMatrix = new G4RotationMatrix();
-  rMatrix->rotateY(90.*deg);
-
-  for(int i =0; i< 6; i++){
-    for(int j=0; j<4; j++){
-      //placements in here
-      std::string stri = std::to_string(i);
-      std::string strj = std::to_string(j);
-      std::string name = "gap";
-      std::string name2 = name.append(stri);
-      std::string name3 = name2.append(strj);
-      G4double yTrans = -fTank_x/2 + (fTank_x/2-fChamber_x/2)/2 + i*22.5*cm; 
-      G4double zTrans = -j*15*cm; 
-      G4double xTrans = -fTank_y/2+(fTank_x/2 - fChamber_x/2);
-      gapsP[i+j] = new G4PVPlacement(rMatrix,
-				     G4ThreeVector(xTrans, yTrans, zTrans),
-				     gapL,
-				     name3,
-				     tankL,
-				     false,
-				     0,
-				     checkOverlaps);
-    }
-  }
-  */
+  
+  
 
   //construct the polyethylene shielding here
   G4double density = 0.94*g/cm3;
@@ -399,6 +363,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   bpoly->AddElement(H,11.6*perCent);
   bpoly->AddElement(O,22.2*perCent);
   bpoly->AddElement(C,61.2*perCent);
+
 
   G4Box* polyS = new G4Box("poly",
 			   fPoly_x/2, fPoly_y/2, fPoly_z/2);
@@ -416,6 +381,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 			    0,
 			    checkOverlaps);
 
+  
   G4Box* nSourceS = new G4Box("source",
 			      fNeutronSource_x/2,(fNeutronSource_y + 15*cm)/2,fNeutronSource_z/2);
 
@@ -431,10 +397,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 			       0,
 			       checkOverlaps);
 			    
-		 
-			   
 
-  
   //always return the root volume
   //
   return worldP;

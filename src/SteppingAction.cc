@@ -118,6 +118,13 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     
   }
 
+  //neutron capture
+  if(post->GetProcessDefinedStep()->GetProcessName() == "nCapture"){
+    if(postLogical == fDetector->detectorL){
+      G4AnalysisManager::Instance()->FillH1(2,ekin);
+    }
+  }
+
   
   //Gamma passing through boundary
   if(particleName == "gamma" && post->GetStepStatus() == fGeomBoundary) {
