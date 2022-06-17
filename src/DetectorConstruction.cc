@@ -300,8 +300,18 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   ///////////////////////////////////////////////////////////////////////////////
 
 
-  
+  //High density polyethylene
   G4Material* PE =  G4NistManager::Instance()->FindOrBuildMaterial("G4_POLYETHYLENE");
+
+  //8 bar helium-3
+  G4Isotope* He3 = new G4Isotope("He3", 2,5);
+  G4Element* He_3 = new G4Element("Helium-3", "He-3", 1);
+  He-3->AddIsotope(He3, 100*perCent);
+		   
+  G4Material* det_He = new G4Material("PressurizedHe3", 0.9832*g/cm3, ncomponents=1, kStateGas, 293.15*kelvin, 8*bar);
+  det_He->AddElement(He_3);
+
+  
   
   probePeL = new G4LogicalVolume(sphereS,
 				 PE, //change later
@@ -324,7 +334,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 				 0.0*deg, 360.0*deg);   //angle
 
   detectorL = new G4LogicalVolume(detectorS,
-				  fMaterial, //change later
+				  det_He, //change later
 				  "detector");
 
   detectorP = new G4PVPlacement(0,

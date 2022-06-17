@@ -113,7 +113,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     }
 
     if(preLogical != fDetector->detectorL && postLogical == fDetector->detectorL){
-      G4AnalysisManager::Instance()->Fill(1,ekin);
+      G4AnalysisManager::Instance()->FillH1(1,ekin);
     }
     
   }
@@ -125,7 +125,6 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     //gamma leaving the tank
     if(preLogical == fDetector->tankL &&
        postLogical == fDetector->roomL){
-      G4AnalysisManager::Instance()->FillH1(1,ekin);
       G4AnalysisManager::Instance()->FillNtupleDColumn(1,0,x/1000); //ID, column,value
       G4AnalysisManager::Instance()->FillNtupleDColumn(1,1,y/1000); //ID, column,value
       G4AnalysisManager::Instance()->FillNtupleDColumn(1,2,z/1000); //ID, column,value
