@@ -49,6 +49,9 @@
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
 
+#include "QGSP_BERT_HP.hh"
+#include "QGSP_BIC_AllHP.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
@@ -74,7 +77,7 @@ int main(int argc,char** argv) {
   DetectorConstruction* det= new DetectorConstruction;
   runManager->SetUserInitialization(det);
 
-  PhysicsList* phys = new PhysicsList;
+  G4VModularPhysicsList* phys = new QGSP_BERT_HP;
   runManager->SetUserInitialization(phys);
   runManager->SetUserInitialization(new ActionInitialization(det));
 

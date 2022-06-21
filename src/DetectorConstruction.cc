@@ -92,8 +92,8 @@ DetectorConstruction::DetectorConstruction()
   fDDHead_z = -fBoxZ/2 + fSlab_z + fGap + 15*cm + fNeutronSource_z/2; //location for source
   detectorDiam = 2.5*cm; //diameter of helium-3 tube
   detectorLen = 8*cm; //length of helium-3 tube
-  detectorPressure = 8; //bar
-  detectorDensity = 0.9832; //g/cm3
+  detectorPressure = 8*atmosphere; //atm
+  detectorDensity = 0.9832*g/cm3; //g/cm3
   DefineMaterials();
   SetMaterial("G4_AIR");   //Sets the material of the world
   fDetectorMessenger = new DetectorMessenger(this);
@@ -296,12 +296,18 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   
   //8 bar helium-3
-  G4Isotope* He3 = new G4Isotope("He3", 2,5);
-  G4Element* He_3 = new G4Element("Helium-3", "He-3", 1);
-  He_3->AddIsotope(He3, 100*perCent);
-		   
-  G4Material* det_He = new G4Material("PressurizedHe3", detectorDensity*g/cm3, ncomponents=1, kStateGas, 293.15*kelvin, detectorPressure*bar);
-  det_He->AddElement(He_3);
+  G4Isotope* He3 = new G4Isotope("He3", 2, 3);
+  G4Element* He = new G4Element("Helium", "He", 1);
+  He->AddIsotope(He3, 100.*perCent);
+  
+  G4Material* det_He = new G4Material("PressurizedHe3", detectorDensity, 1, kStateGas, 293.*kelvin, detectorPressure);
+
+  det_He->AddElement(He, 1);
+
+  /*
+    G4Material* det_He = new G4Material("PressurizedHe3", 2, 3.016*g/mole, detectorDensity, kStateGas, 297.*kelvin, detectorPressure);
+  */
+  
 
   
 

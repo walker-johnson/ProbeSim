@@ -47,6 +47,7 @@
 #include "G4IonElasticPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
+#include "G4ChargeExchange.hh"
 #include "GammaPhysics.hh"
 
 // particles
@@ -77,6 +78,7 @@ PhysicsList::PhysicsList()
 
   //EM physics
   RegisterPhysics(new G4EmStandardPhysics());
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

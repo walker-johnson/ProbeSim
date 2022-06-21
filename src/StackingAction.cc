@@ -66,6 +66,8 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   if(name =="neutron") return fUrgent; //neutrons are tracked first in the urgent stack
   if(name == "gamma") return fWaiting; //gamma particles will be tracked in the waiting
                                        //stack, after the neutrons are tracked
+  if(name == "proton") return fWaiting;
+  if(name == "H3") return fWaiting;
 
   //kill all secondaries  
   return fKill;

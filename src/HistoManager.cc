@@ -66,11 +66,11 @@ void HistoManager::Book()
   const G4String title[] = 
                 { "dummy",                                           //0
                   "KE of Neutrons Hitting Detector",                      //1
-		  "KE of Gammas - Work Area",
-		  "KE of Gammas - Front Door",
-		  "KE of Gammas - Side Door",
-		  "KE of Gammas - Ceiling",
-		  "KE of Neutrons - Work Area",
+		  "KE of Neutron Captures in Detector",
+		  "KE of Neutron Captures in Water Tank",
+		  "KE of Neutron Captures in B-Poly Shield",
+		  "KE of Neutron Inelastic in Detector",
+		  "KE of Proton from neutronInelastic in Detector",
 		  "KE of Neutrons - Front Door",
 		  "KE of Neutrons - Side Door",
 		  "KE of Neutrons - Ceiling",

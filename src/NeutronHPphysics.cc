@@ -153,6 +153,7 @@ void NeutronHPphysics::ConstructProcess()
   // models
   G4ParticleHPFission* model4 = new G4ParticleHPFission();
   process4->RegisterMe(model4);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

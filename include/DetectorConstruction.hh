@@ -84,6 +84,9 @@ public:
   //tank
   G4LogicalVolume* tankL;
   G4VPhysicalVolume* tankP;
+  //poly
+  G4LogicalVolume* polyL;
+  G4VPhysicalVolume* polyP;
   //area dose rates
   G4LogicalVolume* probePeL;
   G4VPhysicalVolume* probePeP;
@@ -133,9 +136,6 @@ private:
   G4VPhysicalVolume* chamberP;
   //gaps
   G4LogicalVolume* gapL;
-  //poly
-  G4LogicalVolume* polyL;
-  G4VPhysicalVolume* polyP;
   //source chamber
   G4LogicalVolume* nSourceL;
   G4VPhysicalVolume* nSourceP;

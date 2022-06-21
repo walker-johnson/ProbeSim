@@ -90,6 +90,20 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   // Get particle name
   G4String particleName = step->GetTrack()->GetDefinition()->GetParticleName();
 
+  //Protons in detector
+  if(particleName == "proton"){
+    if(preLogical == fDetector->detectorL && step->GetTrack()->GetCreatorProcess()->GetProcessName() == "neutronInelastic"){
+      G4AnalysisManager::Instance()->FillH1(6,ekin);
+    }
+  }
+
+  //Neutron Inelastic in detector
+  if(step->GetTrack()->GetParentID() > 0){
+    if(step->GetTrack()->GetCreatorProcess()->GetProcessName() == "neutronInelastic" && preLogical == fDetector->detectorL){
+      std::cout << particleName << " created via neutron inelastic in detector found" << std::endl;
+    }
+  }
+
   //Neutron passing through boundary
   if(particleName == "neutron" && post->GetStepStatus() == fGeomBoundary) {
 
@@ -112,16 +126,29 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       G4AnalysisManager::Instance()->AddNtupleRow(2);
     }
 
-    if(preLogical != fDetector->detectorL && postLogical == fDetector->detectorL){
+    if(preLogical == fDetector->probePeL && postLogical == fDetector->detectorL){
       G4AnalysisManager::Instance()->FillH1(1,ekin);
     }
     
   }
 
   //neutron capture
-  if(post->GetProcessDefinedStep()->GetProcessName() == "nCapture"){
+  if(particleName == "neutron" && post->GetProcessDefinedStep()->GetProcessName() == "nCapture"){
     if(postLogical == fDetector->detectorL){
       G4AnalysisManager::Instance()->FillH1(2,ekin);
+    }
+    if(postLogical == fDetector->tankL){
+      G4AnalysisManager::Instance()->FillH1(3,ekin);
+    }
+    if(postLogical == fDetector->polyL){
+      G4AnalysisManager::Instance()->FillH1(4,ekin);
+    }
+  }
+
+  //neutron inelastic
+  if(particleName == "neutron" && post->GetProcessDefinedStep()->GetProcessName() == "neutronInelastic"){
+    if(postLogical == fDetector->detectorL){
+      G4AnalysisManager::Instance()->FillH1(5,ekin);
     }
   }
 
