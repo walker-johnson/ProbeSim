@@ -100,7 +100,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   //Neutron Inelastic in detector
   if(step->GetTrack()->GetParentID() > 0){
     if(step->GetTrack()->GetCreatorProcess()->GetProcessName() == "neutronInelastic" && preLogical == fDetector->detectorL){
-      std::cout << particleName << " created via neutron inelastic in detector found" << std::endl;
+      //std::cout << particleName << " created via neutron inelastic in detector found" << std::endl;
     }
   }
 
@@ -149,6 +149,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   if(particleName == "neutron" && post->GetProcessDefinedStep()->GetProcessName() == "neutronInelastic"){
     if(postLogical == fDetector->detectorL){
       G4AnalysisManager::Instance()->FillH1(5,ekin);
+      G4AnalysisManager::Instance()->FillNtupleDColumn(4,0,ekin);
+      G4AnalysisManager::Instance()->FillNtupleDColumn(4,1,time);
+      G4AnalysisManager::Instance()->AddNtupleRow(4);
+      
     }
   }
 

@@ -66,9 +66,9 @@ DetectorConstruction::DetectorConstruction()
   fTank_x = 7*2.5*9*cm; //water tank size in x
   fTank_y = 9*2.5*9*cm; //water tank size in y
   fTank_z = 18*6*cm; //water tank size in z
-  fBoxX = 7*m; //World size X
-  fBoxY = 16*m; //World size Y
-  fBoxZ = 4*m;  //World size Z
+  fBoxX = 3*m; //World size X
+  fBoxY = 3*m; //World size Y
+  fBoxZ = 3*m;  //World size Z
   fRoom_x = fBoxX; //Room size
   fRoom_y = fBoxY; //Room size
   fRoom_z = fBoxZ; //Room size
@@ -88,7 +88,7 @@ DetectorConstruction::DetectorConstruction()
   fSlab_z = 17.5*cm; //thickness of concrete slab
   fGap = 10*cm; //size of air gap under concrete slab
   fDDHead_x = 0*cm; //location for source
-  fDDHead_y = -fChamber_y/2 + fPoly_y/2 + 2.5*cm;  //location for source
+  fDDHead_y = -fChamber_y/2 + fPoly_y/2 + 2.5*cm + 5*cm;  //location for source
   fDDHead_z = -fBoxZ/2 + fSlab_z + fGap + 15*cm + fNeutronSource_z/2; //location for source
   detectorDiam = 2.5*cm; //diameter of helium-3 tube
   detectorLen = 8*cm; //length of helium-3 tube
@@ -331,6 +331,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 			       false,
 			       0,
 			       checkOverlaps);
+
+  double distance = fChamber_y/2 - 10*cm- 15*cm - fDDHead_y;
+  double distance_front = fChamber_y/2 - 10*cm- 15*cm - (-fChamber_y/2 + fPoly_y + 2.5*cm);
+
+  std::cout << "probe edge is " << distance/cm << " cm from generator head" << std::endl; 
+  std::cout << "probe edge is " << distance_front/cm << " cm from front of bpoly" << std::endl; 
 
 
 			       

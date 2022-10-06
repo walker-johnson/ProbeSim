@@ -125,6 +125,11 @@ void HistoManager::Book()
   analysisManager->CreateNtupleDColumn("E");
   analysisManager->FinishNtuple();
 
+  //ID = 4, inelastic in detector
+  analysisManager->CreateNtuple("detector", "inelestic scatter in detector");
+  analysisManager->CreateNtupleDColumn("E");
+  analysisManager->CreateNtupleDColumn("t");
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
